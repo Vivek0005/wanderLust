@@ -29,11 +29,31 @@ app.get("/listings", async (req, res) => {
   res.render("listings/index.ejs", { allListings });
 });
 
+// CREATE GET ROUTE
+app.get("/listings/new", (req, res) => {
+  res.render("listings/new.ejs");
+});
+
 // SHOW ROUTE
 app.get("/listings/:id", async (req, res) => {
   let { id } = req.params;
   let listing = await Listing.findById(id);
   res.render("listings/show.ejs", { listing });
+});
+
+// CREATE POST ROUTE
+app.post("/listings", (req, res) => {
+  let listing = new Listing(req.body.listing);
+  listing
+    .save()
+    .then(() => {
+      console.log("Listing saved successfully");
+    })
+    .catch((err) => {
+      console.error("Error saving listing:", err.message);
+    });
+  console.log(listing);
+  res.redirect("/listings");
 });
 
 // PORT CONNECTION
