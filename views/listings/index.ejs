@@ -10,9 +10,9 @@
     <a href="/listings/new">Add new listing</a>
     <br />
     <ul>
-      <% for(let lis of allListings){%>
-      <a href="/listings/<%= lis._id %>"><li><%=lis.title%></li></a>
-      <% }%>
+      <% for(let lis of allListings) { %>
+      <li><a href="/listings/<%= lis._id %>"><%= lis.title %></a></li>
+      <% } %>
     </ul>
   </body>
 </html>
