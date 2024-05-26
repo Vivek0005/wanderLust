@@ -1,0 +1,21 @@
+/* NAVBAR */
+.navbar {
+  background-color: aliceblue !important;
+  height: 4rem;
+}
+
+.nav-icon {
+  font-size: 2rem;
+  color: #ff385c;
+}
+
+.nav-link {
+  color: #222222 !important;
+  transition: all 0.1s ease-in;
+  background-color: aliceblue !important;
+}
+
+.nav-link:hover {
+  color: #ff385c !important;
+  font-size: 1.02rem;
+}
