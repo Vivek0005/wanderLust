@@ -5,7 +5,12 @@
     <br /><br />
     <h3>Edit Listing</h3>
     <br />
-    <form action="/listings/<%= listing._id %>?_method=PUT" method="POST">
+    <form
+      action="/listings/<%= listing._id %>?_method=PUT"
+      method="POST"
+      class="needs-validation"
+      novalidate
+    >
       <div>
         <label for="title" class="form-label"> Title : </label>
         <input
@@ -15,7 +20,9 @@
           id="title"
           placeholder="Enter title"
           class="form-control mb-3"
+          required
         />
+        <div class="invalid-feedback">Enter a title!</div>
       </div>
 
       <div>
@@ -24,9 +31,12 @@
           class="form-control mb-3"
           name="listing[description]"
           id="description"
+          required
         >
 <%= listing.description %>
         </textarea>
+
+        <div class="invalid-feedback">Enter a short description!</div>
       </div>
 
       <div>
@@ -37,8 +47,13 @@
           type="text"
           name="listing[image]"
           id="image"
+          required
           placeholder="Enter image url/link"
         />
+
+        <div class="invalid-feedback">
+          Enter an image!
+        </div>
       </div>
 
       <div>
@@ -49,8 +64,11 @@
           class="form-control mb-3"
           name="listing[location]"
           id="location"
+          required
           placeholder="Enter Location"
         />
+
+        <div class="invalid-feedback">Location should be valid!</div>
       </div>
 
       <div class="row">
@@ -62,9 +80,13 @@
             name="listing[country]"
             class="form-control mb-3"
             id="country"
+            required
             placeholder="Enter Country"
           />
+
+          <div class="invalid-feedback">Country should be valid!</div>
         </div>
+
         <div class="col-md-4">
           <label for="price" class="form-label"> Price : </label>
           <input
@@ -73,8 +95,10 @@
             type="number"
             name="listing[price]"
             id="price"
+            required
             placeholder="Enter Price"
           />
+          <div class="invalid-feedback">Price should be valid!</div>
         </div>
       </div>
       <br />

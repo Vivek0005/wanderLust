@@ -57,15 +57,16 @@ app.get("/listings/:id", async (req, res) => {
 });
 
 // CREATE POST ROUTE
-app.post("/listings", async (req, res) => {
+app.post("/listings", async (req, res,next) => {
   try {
     let listing = new Listing(req.body.listing);
     await listing.save();
     console.log("Listing saved successfully");
     res.redirect("/listings");
   } catch (err) {
-    console.error("Error saving listing:", err.message);
-    res.status(500).send("Internal Server Error");
+    // console.error("Error saving listing:", err.message);
+    // res.status(500).send("Internal Server Error");
+    next(err);
   }
 });
 
@@ -105,6 +106,11 @@ app.delete("/listings/:id", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+app.use((err,req,res,next)=>{
+  res.status(501).send("Something Went Wrong!");
+  next(err);
+})
 
 // PORT CONNECTION
 app.listen(process.env.PORT, () => {

@@ -2,10 +2,10 @@
 
 <div class="row">
   <div class="col-8 offset-2">
-    <br><br>
+    <br /><br />
     <h3>Create New Listing</h3>
-    <br>
-    <form action="/listings" method="post">
+    <br />
+    <form action="/listings" method="post" novalidate class="needs-validation">
       <div>
         <label for="title" class="form-label"> Title : </label>
         <input
@@ -14,7 +14,15 @@
           id="title"
           placeholder="Enter title"
           class="form-control mb-3"
+          required
         />
+        <div class="valid-feedback">
+          Title looks good!
+        </div>
+
+        <div class="invalid-feedback">
+          Enter a title!
+        </div>
       </div>
 
       <div>
@@ -22,8 +30,13 @@
         <textarea
           class="form-control mb-3"
           name="listing[description]"
+          required
           id="description"
         ></textarea>
+
+        <div class="invalid-feedback">
+          Enter a short description!
+        </div>
       </div>
 
       <div>
@@ -43,9 +56,13 @@
           type="text"
           class="form-control mb-3"
           name="listing[location]"
+          required
           id="location"
           placeholder="Enter Location"
         />
+        <div class="invalid-feedback">
+          Location should be valid!
+        </div>
       </div>
 
       <div class="row">
@@ -55,24 +72,32 @@
             type="text"
             name="listing[country]"
             class="form-control mb-3"
+            required
             id="country"
             placeholder="Enter Country"
           />
+          <div class="invalid-feedback">
+            Country should be valid!
+          </div>
         </div>
+
         <div class="col-md-4">
           <label for="price" class="form-label"> Price : </label>
           <input
             class="form-control mb-3"
-            type="number"
             name="listing[price]"
+            required
             id="price"
             placeholder="Enter Price"
           />
+          <div class="invalid-feedback">
+            Price should be valid!
+          </div>
         </div>
       </div>
       <br />
       <button class="btn add-btn">Add</button>
-      <br><br>
+      <br /><br />
     </form>
   </div>
 </div>
