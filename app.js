@@ -9,6 +9,8 @@ const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const wrapAsync = require("./utils/wrapAsync.js");
 const listingSchema = require("./utils/listingValidation.js");
+const Review = require("./models/review.js");
+const reviewSchema = require("./utils/reviewValidation.js");
 
 // DATABASE CONNECTION
 db_connection()
@@ -21,11 +23,10 @@ db_connection()
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
-app.engine("ejs", ejsMate);
-app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
   res.send("Root");
@@ -48,9 +49,12 @@ app.get("/listings/new", (req, res) => {
 // SHOW ROUTE
 app.get(
   "/listings/:id",
-  wrapAsync(async (req, res) => {
+  wrapAsync(async (req, res, next) => {
     let { id } = req.params;
     let listing = await Listing.findById(id);
+    if (!listing) {
+      return next(new ExpressError(404, "Listing not found"));
+    }
     res.render("listings/show.ejs", { listing });
   })
 );
@@ -59,11 +63,11 @@ app.get(
 app.post(
   "/listings",
   wrapAsync(async (req, res, next) => {
-    let listing = new Listing(req.body);
-    const { error, value } = listingSchema.validate(listing);
+    const { error, value } = listingSchema.validate(req.body);
     if (error) {
-      return next(new ExpressError(400, error));
+      return next(new ExpressError(400, error.message));
     }
+    let listing = new Listing(value);
     await listing.save();
     console.log("Listing saved successfully");
     res.redirect("/listings");
@@ -73,9 +77,12 @@ app.post(
 // EDIT ROUTE
 app.get(
   "/listings/:id/edit",
-  wrapAsync(async (req, res) => {
+  wrapAsync(async (req, res, next) => {
     let { id } = req.params;
     let listing = await Listing.findById(id);
+    if (!listing) {
+      return next(new ExpressError(404, "Listing not found"));
+    }
     res.render("listings/edit.ejs", { listing });
   })
 );
@@ -84,13 +91,15 @@ app.get(
 app.put(
   "/listings/:id",
   wrapAsync(async (req, res, next) => {
-    let { id } = req.params;
     const { error, value } = listingSchema.validate(req.body);
     if (error) {
-      return next(new ExpressError(400, error));
+      return next(new ExpressError(400, error.message));
     }
-    let editedListing = req.body;
-    await Listing.findByIdAndUpdate(id, editedListing);
+    let { id } = req.params;
+    let listing = await Listing.findByIdAndUpdate(id, value, { new: true });
+    if (!listing) {
+      return next(new ExpressError(404, "Listing not found"));
+    }
     res.redirect(`/listings/${id}`);
   })
 );
@@ -98,22 +107,56 @@ app.put(
 // DESTROY ROUTE
 app.delete(
   "/listings/:id",
-  wrapAsync(async (req, res) => {
+  wrapAsync(async (req, res, next) => {
     let { id } = req.params;
-    await Listing.findByIdAndDelete(id);
+    let listing = await Listing.findByIdAndDelete(id);
+    if (!listing) {
+      return next(new ExpressError(404, "Listing not found"));
+    }
     res.redirect("/listings");
   })
 );
 
-// error handling middleware
+// Reviews
+// Create REVIEW ROUTE
+app.post(
+  "/listings/:id/reviews",
+  wrapAsync(async (req, res, next) => {
+    const { error, value } = reviewSchema.validate(req.body.review);
+    if (error) {
+      return next(new ExpressError(400, error.message));
+    }
+    let listing = await Listing.findById(req.params.id);
+    if (!listing) {
+      return next(new ExpressError(404, "Listing not found"));
+    }
+    let newReview = new Review(value);
+
+    listing.reviews.push(newReview);
+    await newReview.save();
+    await listing.save();
+
+    res.redirect(`/listings/${listing._id}`);
+  })
+);
+
+
+// PAGE NOT FOUND Middleware
 app.all("*", (req, res, next) => {
   next(new ExpressError(404, "PAGE NOT FOUND"));
 });
 
+// Error Handling Middleware
 app.use((err, req, res, next) => {
-  let { sts = 500, msg = "Something went wrong" } = err;
-  res.status(sts);
-  res.render("error.ejs", { msg });
+  console.error("Error encountered:", err);
+
+  let { status = 500, message = "Something went wrong" } = err;
+
+  if (err.name === "ValidationError") {
+    status = 400;
+    message = Object.values(err.errors)[0].message;
+  }
+  res.status(status).render("error.ejs", { message });
 });
 
 // PORT CONNECTION

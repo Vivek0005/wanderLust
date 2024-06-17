@@ -1,5 +1,4 @@
 const Joi = require("joi");
-const ExpressError = require("./ExpressError.js");
 
 const listingSchema = Joi.object({
   listing: Joi.object({
@@ -9,7 +8,7 @@ const listingSchema = Joi.object({
     country: Joi.string().required(),
     price: Joi.number().min(0).required(),
     image: Joi.string().uri().optional(),
-  }),
+  }).min(1).required(), 
 });
 
 module.exports = listingSchema;
