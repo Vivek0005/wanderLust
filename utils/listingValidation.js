@@ -7,8 +7,8 @@ const listingSchema = Joi.object({
     location: Joi.string().required(),
     country: Joi.string().required(),
     price: Joi.number().min(0).required(),
-    image: Joi.string().uri().optional(),
-  }).min(1).required(), 
+    image: Joi.string().allow('').optional(),
+  }).required(),
 });
 
 module.exports = listingSchema;
