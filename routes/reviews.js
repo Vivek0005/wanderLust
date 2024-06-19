@@ -22,6 +22,8 @@ router.post(
     await newReview.save();
     await listing.save();
 
+    req.flash("success", "Review added successfully");
+
     res.redirect(`/listings/${listing._id}`);
   })
 );
@@ -33,6 +35,7 @@ router.delete(
     let { id, reviewId } = req.params;
 
     let review = await Review.findByIdAndDelete(reviewId);
+    req.flash("success", "Review deleted successfully");
     if (!review) {
       return next(new ExpressError(404, "Review not found"));
     }
