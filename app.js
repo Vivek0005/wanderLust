@@ -7,9 +7,13 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const session = require("express-session");
-const listings = require("./routes/listings");
-const reviews = require("./routes/reviews");
 const flash = require("connect-flash");
+const User = require("./models/user");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const listingRouter = require("./routes/listings");
+const reviewRouter = require("./routes/reviews");
+const userRouter = require("./routes/users.js");
 
 // DATABASE CONNECTION
 db_connection()
@@ -39,6 +43,13 @@ app.use(methodOverride("_method"));
 app.use(session(sessionOptions));
 app.use(flash());
 
+passport.initialize();
+passport.session();
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
@@ -46,10 +57,13 @@ app.use((req, res, next) => {
 });
 
 // Listing Routes
-app.use("/listings", listings);
+app.use("/listings", listingRouter);
 
 // Review Routes
-app.use("/listings/:id/reviews", reviews);
+app.use("/listings/:id/reviews", reviewRouter);
+
+// User routes
+app.use("/", userRouter);
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
