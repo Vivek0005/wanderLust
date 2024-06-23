@@ -1,4 +1,4 @@
-const ExpressError = require("./ExpressError");
+const ExpressError = require("../utils/ExpressError");
 
 const validateMiddleware = (schema) => {
   return (req, res, next) => {

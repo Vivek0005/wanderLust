@@ -4,7 +4,7 @@ const ExpressError = require("../utils/ExpressError");
 const wrapAsync = require("../utils/wrapAsync");
 const Review = require("../models/review");
 const reviewSchema = require("../utils/reviewValidation");
-const validateMiddleware = require("../utils/validationMiddleware");
+const validateMiddleware = require("../middlewares/validationMiddleware");
 const Listing = require("../models/listing");
 
 // Create REVIEW ROUTE

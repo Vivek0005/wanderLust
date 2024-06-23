@@ -3,8 +3,9 @@ const router = express.Router();
 const ExpressError = require("../utils/ExpressError");
 const wrapAsync = require("../utils/wrapAsync");
 const Listing = require("../models/listing");
-const validateMiddleware = require("../utils/validationMiddleware");
+const validateMiddleware = require("../middlewares/validationMiddleware");
 const listingSchema = require("../utils/listingValidation");
+const {isLoggedIn} = require("../middlewares/authMiddleware.js");
 
 // INDEX ROUTE
 router.get(
@@ -16,7 +17,7 @@ router.get(
 );
 
 // CREATE GET ROUTE
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
   res.render("listings/new.ejs");
 });
 
@@ -38,6 +39,7 @@ router.get(
 // CREATE POST ROUTE
 router.post(
   "/",
+  isLoggedIn,
   validateMiddleware(listingSchema),
   wrapAsync(async (req, res, next) => {
     console.log(req.body.listing);
@@ -52,6 +54,7 @@ router.post(
 // EDIT ROUTE
 router.get(
   "/:id/edit",
+  isLoggedIn,
   wrapAsync(async (req, res, next) => {
     let { id } = req.params;
     let listing = await Listing.findById(id);
@@ -67,6 +70,7 @@ router.get(
 // UPDATE ROUTE
 router.put(
   "/:id",
+  isLoggedIn,
   validateMiddleware(listingSchema),
   wrapAsync(async (req, res, next) => {
     let { id } = req.params;
@@ -90,6 +94,7 @@ router.put(
 // DESTROY ROUTE
 router.delete(
   "/:id",
+  isLoggedIn,
   wrapAsync(async (req, res, next) => {
     let { id } = req.params;
     let listing = await Listing.findByIdAndDelete(id);

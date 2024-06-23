@@ -43,8 +43,9 @@ app.use(methodOverride("_method"));
 app.use(session(sessionOptions));
 app.use(flash());
 
-passport.initialize();
-passport.session();
+app.use(passport.initialize());
+app.use(passport.session());
+
 passport.use(new LocalStrategy(User.authenticate()));
 
 passport.serializeUser(User.serializeUser());
@@ -53,6 +54,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
+  res.locals.CurrentUser = req.user;
   next();
 });
 
@@ -80,7 +82,7 @@ app.all("*", (req, res, next) => {
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
-  console.error("Error encountered:", err);
+  // console.error("Error encountered:", err);
 
   let { status = 500, message = "Something went wrong" } = err;
 
