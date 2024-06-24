@@ -5,7 +5,7 @@ const wrapAsync = require("../utils/wrapAsync");
 const Listing = require("../models/listing");
 const validateMiddleware = require("../middlewares/validationMiddleware");
 const listingSchema = require("../utils/listingValidation");
-const {isLoggedIn} = require("../middlewares/authMiddleware.js");
+const { isLoggedIn,isOwnerListings } = require("../middlewares/authMiddleware.js");
 
 // INDEX ROUTE
 router.get(
@@ -26,7 +26,9 @@ router.get(
   "/:id",
   wrapAsync(async (req, res, next) => {
     let { id } = req.params;
-    let listing = await Listing.findById(id).populate("reviews");
+    let listing = await Listing.findById(id)
+      .populate("reviews")
+      .populate("owner");
     if (!listing) {
       // return next(new ExpressError(404, "Listing not found"));
       req.flash("error", " The Listing was not found");
@@ -44,6 +46,7 @@ router.post(
   wrapAsync(async (req, res, next) => {
     console.log(req.body.listing);
     let listing = new Listing(req.body.listing);
+    listing.owner = req.user._id;
     await listing.save();
     req.flash("success", "Listing created successfully");
     console.log("Listing saved successfully");
@@ -58,8 +61,14 @@ router.get(
   wrapAsync(async (req, res, next) => {
     let { id } = req.params;
     let listing = await Listing.findById(id);
+
+    let user = res.locals.CurrentUser;
+    if (!user._id.equals(listing.owner._id)) {
+      req.flash("error", "You are not authorized to perform this action");
+      return res.redirect(`/listings/${id}`);
+    }
+
     if (!listing) {
-      // return next(new ExpressError(404, "Listing not found"));
       req.flash("error", " The Listing was not found");
       res.redirect("/listings");
     }
@@ -74,13 +83,18 @@ router.put(
   validateMiddleware(listingSchema),
   wrapAsync(async (req, res, next) => {
     let { id } = req.params;
-    // console.log(req.body.listing);
 
-    let listing = await Listing.findByIdAndUpdate(id, req.body.listing, {
+    let listing = await Listing.findById(id);
+    let user = res.locals.CurrentUser;
+    if (user && !user._id.equals(listing.owner._id)) {
+      req.flash("error", "You are not authorized to edit this listing");
+      return res.redirect(`/listings/${id}`);
+    }
+
+    listing = await Listing.findByIdAndUpdate(id, req.body.listing, {
       new: true,
     });
     req.flash("success", "Listing updated successfully");
-
     // console.log(listing);
     if (!listing) {
       // return next(new ExpressError(404, "Listing not found"));
@@ -97,6 +111,7 @@ router.delete(
   isLoggedIn,
   wrapAsync(async (req, res, next) => {
     let { id } = req.params;
+
     let listing = await Listing.findByIdAndDelete(id);
     req.flash("success", "Listing deleted successfully");
     if (!listing) {

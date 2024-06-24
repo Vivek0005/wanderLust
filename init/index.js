@@ -1,22 +1,30 @@
 const mongoose = require("mongoose");
 const data = require("./listingData.js");
-const listing = require("../models/listing.js");
-const db_connect = require("../config/db.js");
 const Listing = require("../models/listing");
+const db_connect = require("../config/db.js");
 require("dotenv").config();
 
 const initData = async () => {
-  await Listing.deleteMany();
-  await Listing.insertMany(data.data);
-  console.log("data initialized");
+  try {
+    await Listing.deleteMany();
+    const updatedData = data.data.map((listing) => {
+      return { ...listing, owner: "667815f7bd84eb8d830bede7" };
+    });
+    await Listing.insertMany(updatedData);
+    console.log("Data initialized");
+  } catch (err) {
+    console.error("Error initializing data:", err);
+  }
 };
 
-db_connect()
-  .then(() => {
+const start = async () => {
+  try {
+    await db_connect();
     console.log("Connection successful");
-  })
-  .catch((err) => {
-    console.error("Error connecting to database:", err);
-  });
+    await initData();
+  } catch (err) {
+    console.error("Error connecting to database or initializing data:", err);
+  }
+};
 
-initData();
+start();

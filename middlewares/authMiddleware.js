@@ -14,7 +14,13 @@ const saveRedirectUrl = (req, res, next) => {
   return next();
 };
 
+const isOwnerListings = (req, res, next) => {
+  
+  return next();
+};
+
 module.exports = {
   isLoggedIn,
   saveRedirectUrl,
+  isOwnerListings,
 };
