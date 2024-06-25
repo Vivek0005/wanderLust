@@ -1,3 +1,6 @@
+const Listing = require("../models/listing");
+const Review = require("../models/review");
+
 const isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
     req.session.redirectUrl = req.originalUrl;
@@ -14,13 +17,32 @@ const saveRedirectUrl = (req, res, next) => {
   return next();
 };
 
-const isOwnerListings = (req, res, next) => {
-  
+const isOwner = async (req, res, next) => {
+  let { id } = req.params;
+  let listing = await Listing.findById(id);
+
+  let user = res.locals.CurrentUser;
+  if (!user._id.equals(listing.owner._id)) {
+    req.flash("error", "You are not authorized to perform this action");
+    return res.redirect(`/listings/${id}`);
+  }
+  return next();
+};
+
+const isAuthor = async (req, res, next) => {
+  let { id, reviewId } = req.params;
+  let review = await Review.findById(reviewId);
+  let user = res.locals.CurrentUser;
+  if (!user._id.equals(review.author._id)) {
+    req.flash("error", "You are not authorized to perform this action");
+    return res.redirect(`/listings/${id}`);
+  }
   return next();
 };
 
 module.exports = {
   isLoggedIn,
   saveRedirectUrl,
-  isOwnerListings,
+  isOwner,
+  isAuthor,
 };
