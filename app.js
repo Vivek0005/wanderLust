@@ -7,6 +7,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const User = require("./models/user");
 const passport = require("passport");
@@ -24,7 +25,20 @@ db_connection()
     console.error("DB connection error:", err);
   });
 
+const store = MongoStore.create({
+  mongoUrl: process.env.ATLAS_URL,
+  touchAfter: 24 * 60 * 60,
+  crypto: {
+    secret: process.env.SECRET,
+  },
+});
+
+store.on("error", (e) => {
+  console.log("MONGO SESSION STORE ERROR", e);
+});
+
 const sessionOptions = {
+  store: store,
   secret: "process.env.SECRET",
   resave: false,
   saveUninitialized: true,
