@@ -10,6 +10,9 @@ const userSchema = new Schema({
     required: true,
     type: String,
   },
+  contact: {
+    type: String,
+  },
 });
 
 userSchema.plugin(passportLocalMongoose);

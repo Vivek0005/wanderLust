@@ -29,6 +29,17 @@ const listingSchema = new mongoose.Schema({
   country: {
     type: String,
   },
+  geometry: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      required: true,
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+    },
+  },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

@@ -39,6 +39,20 @@
       </div>
 
       <div>
+        <label for="contact" class="form-label"> Contact - Number : </label>
+        <input
+          type="tel"
+          name="contact"
+          id="contact"
+          placeholder="Contact"
+          class="form-control mb-3"
+          pattern="[0-9]{10}"
+          required
+        />
+        <div class="invalid-feedback">Contact required!</div>
+      </div>
+
+      <div>
         <label for="username" class="form-label"> Password : </label>
         <input
           type="password"

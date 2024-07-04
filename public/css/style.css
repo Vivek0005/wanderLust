@@ -13,7 +13,7 @@ body {
 
 /* NAVBAR */
 .navbar {
-  background-color: aliceblue !important;
+  background-color: whitesmoke !important;
   height: 4rem;
 }
 
@@ -25,12 +25,11 @@ body {
 .nav-link {
   color: #222222 !important;
   transition: all 0.1s ease-in;
-  background-color: aliceblue !important;
+  background-color: whitesmoke !important;
 }
 
 .nav-link:hover {
   color: #ff385c !important;
-  font-size: 1.02rem;
 }
 
 /* INDEX CARDS */
@@ -82,11 +81,11 @@ body {
 }
 
 /* SHOW */
-.show-img{
+.show-img {
   height: 25rem;
 }
 
-.edit-btn{
+.edit-btn {
   background-color: #ff385c !important;
   color: white;
 }
@@ -94,7 +93,7 @@ body {
 /* FOOTER */
 .f-info {
   height: 8rem;
-  background-color: aliceblue;
+  background-color: whitesmoke;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -123,4 +122,10 @@ body {
 .f-info-links a:hover {
   text-decoration: underline;
   color: #ff385c;
+}
+
+/* map */
+#map {
+  height: 18rem;
+  width: 52rem;
 }

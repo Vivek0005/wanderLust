@@ -1,43 +1,43 @@
 const express = require("express");
 const router = express.Router();
-const ExpressError = require("../utils/ExpressError");
-const wrapAsync = require("../utils/wrapAsync");
-const Listing = require("../models/listing");
 const validateMiddleware = require("../middlewares/validationMiddleware");
 const listingSchema = require("../utils/listingValidation");
 const { isLoggedIn, isOwner } = require("../middlewares/authMiddleware.js");
 const ListingController = require("../controllers/listingsC.js");
+const multer = require("multer");
+const { cloudStorage } = require("../config/cloud.js");
+const upload = multer({ storage: cloudStorage });
 
-// INDEX ROUTE
-router.get("/", ListingController.index);
+router
+  .route("/")
+  // SHOW ROUTE
+  .get(ListingController.index)
+  // CREATE ROUTE
+  .post(
+    isLoggedIn,
+    // validateMiddleware(listingSchema),
+    upload.single("listing[image]"),
+    ListingController.createListing
+  );
 
-// CREATE GET ROUTE
+// CREATE FORM ROUTE
 router.get("/new", isLoggedIn, ListingController.newListingForm);
 
-// SHOW ROUTE
-router.get("/:id", ListingController.showListing);
-
-// CREATE POST ROUTE
-router.post(
-  "/",
-  isLoggedIn,
-  validateMiddleware(listingSchema),
-  ListingController.createListing
-);
+router
+  .route("/:id")
+  // EDIT FORM ROUTE
+  .get(ListingController.showListing)
+  // UPDATE ROUTE
+  .put(
+    isLoggedIn,
+    isOwner,
+    validateMiddleware(listingSchema),
+    ListingController.updateListing
+  )
+  // DESTROY ROUTE
+  .delete(isLoggedIn, isOwner, ListingController.destroyListing);
 
 // EDIT ROUTE
 router.get("/:id/edit", isLoggedIn, isOwner, ListingController.editListingForm);
-
-// UPDATE ROUTE
-router.put(
-  "/:id",
-  isLoggedIn,
-  isOwner,
-  validateMiddleware(listingSchema),
-  ListingController.updateListing
-);
-
-// DESTROY ROUTE
-router.delete("/:id", isLoggedIn, isOwner, ListingController.destroyListing);
 
 module.exports = router;

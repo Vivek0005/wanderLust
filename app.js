@@ -72,7 +72,7 @@ app.set("views", path.join(__dirname, "views"));
 app.engine("ejs", ejsMate);
 
 app.get("/", (req, res) => {
-  res.send("Root");
+  res.render("listings/home.ejs");
 });
 
 // PAGE NOT FOUND Middleware

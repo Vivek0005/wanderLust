@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
+const atlasUrl = process.env.ATLAS_URL;
 
 async function db_connect() {
-  const url = "mongodb://127.0.0.1:27017/wanderlust";
+  const url = atlasUrl;
   // console.log(process.env.DATABASE_URL);
   await mongoose.connect(url);
 }
