@@ -13,6 +13,12 @@ const userSchema = new Schema({
   contact: {
     type: String,
   },
+  bookings: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Booking",
+    },
+  ],
 });
 
 userSchema.plugin(passportLocalMongoose);

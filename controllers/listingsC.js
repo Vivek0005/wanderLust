@@ -2,6 +2,7 @@ const Listing = require("../models/listing");
 const wrapAsync = require("../utils/wrapAsync");
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 const mapboxToken = process.env.MAP_TOKEN;
+const Booking = require("../models/booking");
 const geocodingClient = mbxGeocoding({ accessToken: mapboxToken });
 const ExpressError = require("../utils/ExpressError");
 
@@ -89,4 +90,33 @@ module.exports.destroyListing = wrapAsync(async (req, res, next) => {
     return next(new ExpressError(404, "Listing not found"));
   }
   res.redirect("/listings");
+});
+
+module.exports.renderBookingForm = wrapAsync(async (req, res) => {
+  const listing = await Listing.findById(req.params.id);
+  if (!listing) {
+    req.flash("error", "The Listing was not found");
+    return res.redirect("/listings");
+  }
+  res.render("listings/book", { listing });
+});
+
+module.exports.createBooking = wrapAsync(async (req, res) => {
+  const { id } = req.params;
+  const listing = await Listing.findById(id);
+  if (!listing) {
+    req.flash("error", "The Listing was not found");
+    return res.redirect("/listings");
+  }
+
+  const booking = new Booking(req.body.booking);
+  booking.listing = listing._id;
+  booking.user = req.user._id;
+  await booking.save();
+
+  req.user.bookings.push(booking);
+  await req.user.save();
+
+  req.flash("success", "Booking created successfully");
+  res.redirect(`/listings/${id}`);
 });

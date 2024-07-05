@@ -40,4 +40,9 @@ router
 // EDIT ROUTE
 router.get("/:id/edit", isLoggedIn, isOwner, ListingController.editListingForm);
 
+router
+  .route("/:id/book")
+  .get(isLoggedIn, ListingController.renderBookingForm)
+  .post(isLoggedIn, ListingController.createBooking);
+
 module.exports = router;

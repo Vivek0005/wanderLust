@@ -44,6 +44,7 @@ body {
 
 .card-img-top {
   width: 100% !important;
+  background-position: center !important;
   border-radius: 1rem !important;
   object-fit: cover !important;
 }
@@ -128,4 +129,90 @@ body {
 #map {
   height: 18rem;
   width: 52rem;
+}
+
+#preLoader {
+  background: white url(/preLoad.gif) no-repeat center center;
+  background-size: 30%;
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+  z-index: 100;
+}
+
+/* Home */
+.page1 {
+  height: 100vh;
+  width: 100%;
+  background-color: rgb(74, 150, 216);
+  /* background-image: url(/home.avif); */
+  background-image: url(https://images.unsplash.com/photo-1544984243-ec57ea16fe25?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+  background-position: center;
+  background-size: cover;
+}
+
+#home-text {
+  position: absolute;
+  top: 30%;
+  left: 7%;
+  color: white;
+  /* background-color: white; */
+  width: 40%;
+  height: 40%;
+}
+
+#home-text h1 {
+  font-size: 3.5rem;
+}
+
+.page2 {
+  height: 100vh;
+  width: 100%;
+  /* background-color: #ff385c; */
+}
+
+#top-selling {
+  text-align: center;
+  padding-top: 40px;
+}
+
+#top-selling h4 {
+  padding-top: 6px;
+  font-size: 46px;
+}
+
+#top-selling p {
+  /* padding-top: 20px; */
+  font-size: 22px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.explore-btn{
+  position: absolute;
+  margin-left: 29rem;
+  margin-top: -1.5rem;
+}
+
+.page3 {
+  height: 100vh;
+  width: 100%;
+  background-color: rgb(31, 31, 31);
+}
+
+#services-pg3 {
+  text-align: center;
+  padding-top: 40px;
+}
+
+#services-pg3 h4 {
+  padding-top: 6px;
+  font-size: 46px;
+}
+
+#services-pg3 p {
+  /* padding-top: 20px; */
+  font-size: 22px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.6);
 }
