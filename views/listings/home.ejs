@@ -28,17 +28,13 @@
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/rating.css" />
 
-    <style>
-      body{
-        overflow-x: hidden;
-      }
-    </style>
-
     <link
       href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css"
       rel="stylesheet"
     />
+
   </head>
+
   <body>
     <div id="preLoader"></div>
 
@@ -83,6 +79,7 @@
         </h1>
       </div>
     </div>
+
     <div class="page2 row">
       <div id="top-selling">
         <p>Trending stays</p>
@@ -120,18 +117,15 @@
       </div>
     </div>
 
-    <div class="page3">
-      
-    </div>
+    <div class="page3"></div>
 
     <%-include("../includes/footer")%>
-    
+
     <script>
       var loader = document.querySelector("#preLoader");
       loader.style.display = "block";
       setTimeout(() => {
         loader.style.display = "none";
-        //window.location.href = "/listings"
       }, 5000);
     </script>
   </body>

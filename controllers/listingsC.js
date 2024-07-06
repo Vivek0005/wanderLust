@@ -5,6 +5,7 @@ const mapboxToken = process.env.MAP_TOKEN;
 const Booking = require("../models/booking");
 const geocodingClient = mbxGeocoding({ accessToken: mapboxToken });
 const ExpressError = require("../utils/ExpressError");
+const sendBookingConfirmation = require("../utils/nodeMailer");
 
 module.exports.index = wrapAsync(async (req, res) => {
   let allListings = await Listing.find({});
@@ -103,7 +104,7 @@ module.exports.renderBookingForm = wrapAsync(async (req, res) => {
 
 module.exports.createBooking = wrapAsync(async (req, res) => {
   const { id } = req.params;
-  const listing = await Listing.findById(id);
+  const listing = await Listing.findById(id).populate("owner");
   if (!listing) {
     req.flash("error", "The Listing was not found");
     return res.redirect("/listings");
@@ -117,6 +118,26 @@ module.exports.createBooking = wrapAsync(async (req, res) => {
   req.user.bookings.push(booking);
   await req.user.save();
 
-  req.flash("success", "Booking created successfully");
+  try {
+    await sendBookingConfirmation(
+      req.user.email,
+      listing.title,
+      listing.location,
+      booking.checkInDate,
+      booking.checkOutDate,
+      listing.owner.username,
+      listing.owner.contact
+    );
+    req.flash(
+      "success",
+      "Booking successful. Please Check your email for confirmation"
+    );
+  } catch (error) {
+    req.flash(
+      "error",
+      "Booking created successfully but there was an issue sending the confirmation email."
+    );
+  }
+
   res.redirect(`/listings/${id}`);
 });
