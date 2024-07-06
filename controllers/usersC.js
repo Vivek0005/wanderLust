@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const { sendWelcomeEmail } = require("../utils/nodeMailer");
 
 module.exports.signUpForm = (req, res) => {
   res.render("users/signup");
@@ -9,6 +10,8 @@ module.exports.signUp = async (req, res) => {
     const { username, email, password, contact } = req.body;
     const user = new User({ username, email, contact });
     const registeredUser = await User.register(user, password);
+    await sendWelcomeEmail(email, username);
+
     req.login(registeredUser, (err) => {
       if (err) {
         return next(err);

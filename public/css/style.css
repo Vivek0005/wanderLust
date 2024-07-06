@@ -26,6 +26,8 @@ body {
   color: #222222 !important;
   transition: all 0.1s ease-in;
   background-color: whitesmoke !important;
+  font-weight: 500 !important;
+  /* z-index: 100!important; */
 }
 
 .nav-link:hover {
@@ -118,6 +120,7 @@ body {
 .f-info-links a {
   color: #222222;
   text-decoration: none;
+  margin-right: 15px;
 }
 
 .f-info-links a:hover {

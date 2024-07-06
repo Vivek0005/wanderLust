@@ -40,6 +40,7 @@ router
 // EDIT ROUTE
 router.get("/:id/edit", isLoggedIn, isOwner, ListingController.editListingForm);
 
+// BOOK ROUTE
 router
   .route("/:id/book")
   .get(isLoggedIn, ListingController.renderBookingForm)

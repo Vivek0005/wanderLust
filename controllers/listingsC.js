@@ -5,7 +5,7 @@ const mapboxToken = process.env.MAP_TOKEN;
 const Booking = require("../models/booking");
 const geocodingClient = mbxGeocoding({ accessToken: mapboxToken });
 const ExpressError = require("../utils/ExpressError");
-const sendBookingConfirmation = require("../utils/nodeMailer");
+const { sendBookingConfirmation } = require("../utils/nodeMailer");
 
 module.exports.index = wrapAsync(async (req, res) => {
   let allListings = await Listing.find({});
@@ -121,12 +121,14 @@ module.exports.createBooking = wrapAsync(async (req, res) => {
   try {
     await sendBookingConfirmation(
       req.user.email,
+      req.user.username,
       listing.title,
       listing.location,
-      booking.checkInDate,
-      booking.checkOutDate,
+      booking.checkin,
+      booking.checkout,
       listing.owner.username,
-      listing.owner.contact
+      listing.owner.contact,
+      listing.price
     );
     req.flash(
       "success",

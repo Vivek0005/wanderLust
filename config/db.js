@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
-const atlasUrl = process.env.ATLAS_URL;
+// const atlasUrl = process.env.ATLAS_URL;
 const mongoUrl = process.env.MONGO_URL;
 
 async function db_connect() {
