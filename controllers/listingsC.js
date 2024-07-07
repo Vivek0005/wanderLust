@@ -85,15 +85,13 @@ module.exports.updateListing = wrapAsync(async (req, res, next) => {
 
 module.exports.destroyListing = wrapAsync(async (req, res, next) => {
   const { id } = req.params;
-  const listing = await Listing.findById(id);
+  const listing = await Listing.findByIdAndDelete(id);
+  await Review.deleteMany({ _id: { $in: listing.reviews } });
 
   if (!listing) {
     req.flash("error", "Listing not found");
     return res.redirect("/listings");
   }
-
-  await Review.deleteMany({ _id: { $in: listing.reviews } });
-  await Listing.findByIdAndDelete(id);
 
   req.flash("success", "Listing deleted successfully");
   res.redirect("/listings");
