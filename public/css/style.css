@@ -115,6 +115,12 @@ body {
 .f-info-socials i {
   font-size: 1.3rem;
   margin-right: 15px;
+  transition: all 0.2s ease-in;
+}
+
+.f-info-socials i:hover {
+  color: #ff385c;
+  cursor: pointer;
 }
 
 .f-info-links a {
