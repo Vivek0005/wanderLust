@@ -93,7 +93,7 @@ module.exports.destroyListing = wrapAsync(async (req, res, next) => {
   }
 
   await Review.deleteMany({ _id: { $in: listing.reviews } });
-  await listing.remove();
+  await Listing.findByIdAndDelete(id);
 
   req.flash("success", "Listing deleted successfully");
   res.redirect("/listings");
