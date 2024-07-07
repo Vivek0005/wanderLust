@@ -15,7 +15,7 @@ router
   // CREATE ROUTE
   .post(
     isLoggedIn,
-    // validateMiddleware(listingSchema),
+    validateMiddleware(listingSchema),
     upload.single("listing[image]"),
     ListingController.createListing
   );

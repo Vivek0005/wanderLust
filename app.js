@@ -26,20 +26,20 @@ db_connection()
     console.error("DB connection error:", err);
   });
 
-// const store = MongoStore.create({
-//   mongoUrl: process.env.ATLAS_URL,
-//   touchAfter: 24 * 60 * 60,
-//   crypto: {
-//     secret: process.env.SECRET,
-//   },
-// });
+const store = MongoStore.create({
+  mongoUrl: process.env.ATLAS_URL,
+  touchAfter: 24 * 60 * 60,
+  crypto: {
+    secret: process.env.SECRET,
+  },
+});
 
-// store.on("error", (e) => {
-//   console.log("MONGO SESSION STORE ERROR", e);
-// });
+store.on("error", (e) => {
+  console.log("MONGO SESSION STORE ERROR", e);
+});
 
 const sessionOptions = {
-  // store: store,
+  store: store,
   secret: "process.env.SECRET",
   resave: false,
   saveUninitialized: true,
