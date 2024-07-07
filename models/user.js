@@ -1,14 +1,18 @@
-const { required } = require("joi");
 const mongoose = require("mongoose");
 const passportLocalMongoose = require("passport-local-mongoose");
 
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  //  USERNAME AND PASSWORD Field IS AUTOMATICALLY CREATED BY PASSPORT_MONGOOSE
-  email: {
-    required: true,
+  username: {
     type: String,
+    required: true,
+    unique: true, 
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true, 
   },
   contact: {
     type: String,
