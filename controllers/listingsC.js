@@ -130,10 +130,10 @@ module.exports.createBooking = wrapAsync(async (req, res) => {
       listing.owner.contact,
       listing.price
     );
-    req.flash(
-      "success",
-      "Booking successful. Please Check your email for confirmation"
-    );
+    // req.flash(
+    //   "success",
+    //   "Booking successful. Please Check your email for confirmation"
+    // );
   } catch (error) {
     req.flash(
       "error",
@@ -141,5 +141,10 @@ module.exports.createBooking = wrapAsync(async (req, res) => {
     );
   }
 
-  res.redirect(`/listings/${id}`);
+  res.redirect(`/listings/${id}/booking-success`);
 });
+
+module.exports.renderSuccessPage = (req, res) => {
+  const { id } = req.params;
+  res.render("listings/bookSuccess", { id });
+};

@@ -46,4 +46,10 @@ router
   .get(isLoggedIn, ListingController.renderBookingForm)
   .post(isLoggedIn, ListingController.createBooking);
 
+router.get(
+  "/:id/booking-success",
+  isLoggedIn,
+  ListingController.renderSuccessPage
+);
+
 module.exports = router;
