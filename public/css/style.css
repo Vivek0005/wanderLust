@@ -17,6 +17,22 @@ body {
   height: 4rem;
 }
 
+.dropdown-menu{
+  background-color: whitesmoke !important;
+  /* right: 3.5rem !important;   */
+}
+
+.dropdown-item:hover{
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  /* color: white !important; */
+}
+
+.dropdown-item-icon{
+  color: #ff385c;
+  font-size: 1.1rem !important;
+  margin-right: 6px;
+}
+
 .nav-icon {
   font-size: 2rem;
   color: #ff385c;
@@ -32,6 +48,10 @@ body {
 
 .nav-link:hover {
   color: #ff385c !important;
+}
+
+.ri-user-line{
+  font-size: 1.4rem;
 }
 
 /* INDEX CARDS */
@@ -90,6 +110,7 @@ body {
 
 .edit-btn {
   background-color: #ff385c !important;
+  border: none !important;
   color: white;
 }
 

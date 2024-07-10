@@ -24,4 +24,10 @@ router
 // LOGOUT ROUTE
 router.get("/logout", UserController.logout);
 
+router.get("/users/:id", UserController.getProfile);
+
+router.get("/users/:id/edit", UserController.editProfileForm);
+
+router.put("/users/:id", UserController.updateProfile);
+
 module.exports = router;

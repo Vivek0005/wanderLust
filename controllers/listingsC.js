@@ -71,7 +71,7 @@ module.exports.editListingForm = wrapAsync(async (req, res, next) => {
 
 module.exports.updateListing = wrapAsync(async (req, res, next) => {
   let { id } = req.params;
-  listing = await Listing.findByIdAndUpdate(id, req.body.listing, {
+  let listing = await Listing.findByIdAndUpdate(id, req.body.listing, {
     new: true,
   });
   req.flash("success", "Listing updated successfully");

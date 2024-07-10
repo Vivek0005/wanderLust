@@ -51,3 +51,40 @@ module.exports.logout = (req, res, next) => {
     res.redirect("/listings");
   });
 };
+
+module.exports.getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    res.render("users/userProfile", { user });
+  } catch (err) {
+    req.flash("error", "Failed to load profile.");
+    res.redirect("/listings");
+  }
+};
+
+module.exports.editProfileForm = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    res.render("users/editProfile", { user });
+  } catch (err) {
+    req.flash("error", "Failed to load profile.");
+    res.redirect("/listings");
+  }
+}
+
+module.exports.updateProfile=async (req, res) => {
+    let id=req.params.id;
+    
+    let user = await User.findByIdAndUpdate(id, req.body.user, {
+      new: true,
+    });
+    req.flash("success", "Profile updated successfully");
+   
+    // console.log(user);
+   
+    if (!user) {
+      req.flash("error", "The Profile was not found");
+      res.redirect(`/users/${id}`);
+    }
+    res.redirect(`/users/${id}`);
+}
