@@ -5,14 +5,12 @@ module.exports.signUpForm = (req, res) => {
   res.render("users/signup");
 };
 
-module.exports.signUp = async (req, res) => {
+module.exports.signUp = async (req, res, next) => {
   try {
     const { username, email, password, contact } = req.body;
-
     const user = new User({ username, email, contact });
 
     const registeredUser = await User.register(user, password);
-
     await sendWelcomeEmail(email, username);
 
     req.login(registeredUser, (err) => {
@@ -24,10 +22,7 @@ module.exports.signUp = async (req, res) => {
     });
   } catch (err) {
     if (err.name === "UserExistsError") {
-      req.flash(
-        "error",
-        "Username or Email already exists. Please enter a different one."
-      );
+      req.flash("error", "Username or Email already exists. Please enter a different one.");
     } else {
       req.flash("error", err.message);
     }
@@ -39,10 +34,13 @@ module.exports.loginForm = (req, res) => {
   res.render("users/login");
 };
 
-module.exports.login = async (req, res) => {
+module.exports.login = (req, res) => {
+  // console.log("Redirect URL in locals:", res.locals.redirectUrl);
+  const redirectUrl = res.locals.redirectUrl || "/listings";
   req.flash("success", "Logged in Successfully");
-  res.redirect(req.session.redirectTo || "/listings");
+  res.redirect(redirectUrl);
 };
+
 
 module.exports.logout = (req, res, next) => {
   req.logout((err) => {
