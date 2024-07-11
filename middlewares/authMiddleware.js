@@ -1,5 +1,7 @@
 const Listing = require("../models/listing");
 const Review = require("../models/review");
+const wrapAsync = require("../utils/wrapAsync");
+const User = require("../models/user");
 
 const isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
@@ -12,49 +14,46 @@ const isLoggedIn = (req, res, next) => {
 
 const setRedirectUrl = (req, res, next) => {
   if (req.session.redirectUrl) {
-    // console.log("Redirect URL in session:", req.session.redirectUrl);
     res.locals.redirectUrl = req.session.redirectUrl;
     delete req.session.redirectUrl; 
   } 
   return next();
 };
 
-
-const isOwner = async (req, res, next) => {
+const isOwner = wrapAsync(async (req, res, next) => {
   const { id } = req.params;
-  try {
-    const listing = await Listing.findById(id);
-    if (!req.user._id.equals(listing.owner._id)) {
-      req.flash("error", "You are not authorized to perform this action");
-      return res.redirect(`/listings/${id}`);
-    }
-    return next();
-  } catch (err) {
-    console.error("Error in isOwner middleware:", err);
-    req.flash("error", "Failed to verify ownership");
+  const listing = await Listing.findById(id);
+  if (!req.user._id.equals(listing.owner._id)) {
+    req.flash("error", "You are not authorized to perform this action");
     return res.redirect(`/listings/${id}`);
   }
-};
+  return next();
+});
 
-const isAuthor = async (req, res, next) => {
+const isAuthor = wrapAsync(async (req, res, next) => {
   const { id, reviewId } = req.params;
-  try {
-    const review = await Review.findById(reviewId);
-    if (!req.user._id.equals(review.author._id)) {
-      req.flash("error", "You are not authorized to perform this action");
-      return res.redirect(`/listings/${id}`);
-    }
-    return next();
-  } catch (err) {
-    console.error("Error in isAuthor middleware:", err);
-    req.flash("error", "Failed to verify authorship");
+  const review = await Review.findById(reviewId);
+  if (!req.user._id.equals(review.author._id)) {
+    req.flash("error", "You are not authorized to perform this action");
     return res.redirect(`/listings/${id}`);
   }
-};
+  return next();
+});
+
+const isUser = wrapAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+  if (!req.user._id.equals(user._id)) {
+    req.flash("error", "You are not authorized to view others profile");
+    return res.redirect("/listings");
+  }
+  return next();
+});
 
 module.exports = {
   isLoggedIn,
   setRedirectUrl,
   isOwner,
   isAuthor,
+  isUser,
 };

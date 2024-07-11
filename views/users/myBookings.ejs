@@ -1,0 +1,44 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="row col-12 offset-2 mt-5">
+  <div class="col-md-8 text-center">
+    <% if (!bookings || bookings.length === 0) { %>
+      <div class="alert alert-info">
+        <h4 class="alert-heading mb-3">No bookings found</h4>
+        <p>Looks like you haven't made any bookings yet. Use the button below to browse listings and make a booking.</p>
+      </div>
+      <div class="text-center mt-5">
+        <a href="/listings" class="btn btn-primary add-btn"><i class="ri-search-line"></i> Browse Listings</a>
+      </div>
+    <% } else { %>
+      <h3 class="mb-5">My Booking History</h3>
+      <div class="row">
+        <% for(let booking of bookings) { %>
+          <div class="col-12 mb-4">
+            <a class="listing-link" href="/listings/<%= booking.listing._id %>">
+              <div class="card horizontal-card h-100">
+                <div class="row no-gutters">
+                  <div class="col-md-4">
+                    <img src="<%= booking.listing.image %>" class="card-img" alt="Listing Image">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title"><%= booking.listing.title %></h5>
+                      <p class="card-text">&#8377;<%= booking.listing.price.toLocaleString("en-IN") %> / night</p>
+                      <p class="card-text">Check-in: <%= new Date(booking.checkin).toLocaleDateString("en-IN") %></p>
+                      <p class="card-text">Check-out: <%= new Date(booking.checkout).toLocaleDateString("en-IN") %></p>
+                      <p class="card-text">Special Requests: <%= booking.requests ? booking.requests : 'None' %></p>
+                    </div>
+                    <div class="card-footer text-muted">
+                      <small>Booked on: <%= new Date(booking.createdAt).toLocaleDateString("en-IN") %></small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+</div>

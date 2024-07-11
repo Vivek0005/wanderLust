@@ -54,6 +54,23 @@ body {
   font-size: 1.4rem;
 }
 
+/* Mybookings */
+.horizontal-card .card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.horizontal-card .card-img {
+  object-fit: cover;
+  height: 13.5rem;
+}
+
+.horizontal-card .card-footer {
+  background: none;
+  border-top: none;
+}
+
 /* INDEX CARDS */
 .card-link {
   text-decoration: none;
@@ -246,3 +263,4 @@ body {
   font-weight: 600;
   color: rgba(0, 0, 0, 0.6);
 }
+

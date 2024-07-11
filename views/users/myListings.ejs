@@ -1,0 +1,33 @@
+<% layout('layouts/boilerplate') %>
+
+  <div class="row col-12 offset-2 mt-5">
+    <div class="col-md-8 text-center">
+      <% if (!listings || listings.length === 0) { %>
+        <div class="alert alert-info" >
+          <h4 class="alert-heading mb-3">No listings Found</h4>
+          <p >Looks like you haven't added any listings yet. Use the button below to add a new listing.</p>
+        </div>
+        <div class="text-center mt-5">
+          <a href="/listings/new" class="btn btn-primary add-btn"><i class="ri-add-box-line"></i> Add a New Listing</a>
+        </div>
+      <% } else { %>
+        <h3 class="mb-4">My Listings</h3>
+        <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 row-cols-xs-1">
+          <% for(let lis of listings) { %>
+            <div class="col mb-4">
+              <a class="listing-link" href="/listings/<%= lis._id %>">
+                <div class="card h-100">
+                  <img src="<%= lis.image %>" class="card-img-top" alt="Listing Image" style="height: 20rem;">
+                  <div class="card-body">
+                    <h5 class="card-title"><%= lis.title %></h5>
+                    <p class="card-text">&#8377;<%= lis.price.toLocaleString("en-IN") %> / night</p>
+                    <p class="card-text"><%= lis.location %></p>
+                  </div>
+                </div>
+              </a>
+            </div>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+  </div>

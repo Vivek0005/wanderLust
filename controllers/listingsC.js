@@ -36,6 +36,8 @@ module.exports.createListing = wrapAsync(async (req, res, next) => {
   listing.geometry = geometry;
 
   // listing.image = { url, filename }; ------
+  req.user.listings.push(listing);
+  
   await listing.save();
   req.flash("success", "Listing created successfully");
   res.redirect("/listings");
