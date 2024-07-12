@@ -2,13 +2,33 @@ const Joi = require("joi");
 
 const listingSchema = Joi.object({
   listing: Joi.object({
-    title: Joi.string().required(),
-    description: Joi.string().required(),
-    location: Joi.string().required(),
-    country: Joi.string().required(),
-    price: Joi.number().min(0).required(),
-    image: Joi.string().allow('').optional(),
-  }).required(),
+    title: Joi.string().required().messages({
+      'string.empty': 'Title is required',
+      'any.required': 'Title is required'
+    }),
+    description: Joi.string().required().messages({
+      'string.empty': 'Description is required',
+      'any.required': 'Description is required'
+    }),
+    location: Joi.string().required().messages({
+      'string.empty': 'Location is required',
+      'any.required': 'Location is required'
+    }),
+    country: Joi.string().required().messages({
+      'string.empty': 'Country is required',
+      'any.required': 'Country is required'
+    }),
+    price: Joi.number().min(0).required().messages({
+      'number.base': 'Price must be a number',
+      'number.min': 'Price must be at least 0',
+      'any.required': 'Price is required'
+    }),
+    image: Joi.string().allow('').optional().messages({
+      'string.base': 'Image must be a string'
+    }),
+  }).required().messages({
+    'any.required': 'Listing information is required'
+  }),
 });
 
 module.exports = listingSchema;

@@ -5,7 +5,6 @@ const { setRedirectUrl } = require("../middlewares/authMiddleware");
 const UserController = require("../controllers/usersC.js");
 const { isLoggedIn, isUser } = require("../middlewares/authMiddleware.js");
 
-
 router
   .route("/signup")
   .get(UserController.signUpForm)

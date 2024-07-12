@@ -7,6 +7,7 @@ const ListingController = require("../controllers/listingsC.js");
 const multer = require("multer");
 const { cloudStorage } = require("../config/cloud.js");
 const upload = multer({ storage: cloudStorage });
+const bookingSchema = require("../utils/bookingValidation");
 
 router
   .route("/")
@@ -16,7 +17,7 @@ router
   .post(
     isLoggedIn,
     validateMiddleware(listingSchema),
-    upload.single("listing[image]"),
+    // upload.single("listing[image]"),
     ListingController.createListing
   );
 
@@ -44,7 +45,7 @@ router.get("/:id/edit", isLoggedIn, isOwner, ListingController.editListingForm);
 router
   .route("/:id/book")
   .get(isLoggedIn, ListingController.renderBookingForm)
-  .post(isLoggedIn, ListingController.createBooking);
+  .post(isLoggedIn,validateMiddleware(bookingSchema), ListingController.createBooking);
 
 router.get(
   "/:id/booking-success",
