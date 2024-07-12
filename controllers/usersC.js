@@ -99,6 +99,6 @@ module.exports.UserBookings = wrapAsync(async (req, res, next) => {
     return res.status(404).send("User not found");
   }
 
-  console.log(user.bookings);
+  // console.log(user.bookings);
   res.render("users/myBookings", { bookings: user.bookings });
 });

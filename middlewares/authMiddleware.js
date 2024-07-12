@@ -44,7 +44,7 @@ const isUser = wrapAsync(async (req, res, next) => {
   const { id } = req.params;
   const user = await User.findById(id);
   if (!req.user._id.equals(user._id)) {
-    req.flash("error", "You are not authorized to view others profile");
+    req.flash("error", "You are not authorized to view others profiles");
     return res.redirect("/listings");
   }
   return next();

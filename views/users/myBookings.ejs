@@ -23,8 +23,7 @@
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
-                      <h5 class="card-title"><%= booking.listing.title %></h5>
-                      <p class="card-text">&#8377;<%= booking.listing.price.toLocaleString("en-IN") %> / night</p>
+                      <h5 class="card-title mt-2"><%= booking.listing.title %></h5>
                       <p class="card-text">Check-in: <%= new Date(booking.checkin).toLocaleDateString("en-IN") %></p>
                       <p class="card-text">Check-out: <%= new Date(booking.checkout).toLocaleDateString("en-IN") %></p>
                       <p class="card-text">Special Requests: <%= booking.requests ? booking.requests : 'None' %></p>

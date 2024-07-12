@@ -63,12 +63,16 @@ body {
 
 .horizontal-card .card-img {
   object-fit: cover;
-  height: 13.5rem;
+  height: 11.5rem;
 }
 
 .horizontal-card .card-footer {
   background: none;
   border-top: none;
+}
+
+.horizontal-card{
+  background-color: whitesmoke !important;
 }
 
 /* INDEX CARDS */
