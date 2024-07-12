@@ -151,6 +151,21 @@ module.exports.createBooking = wrapAsync(async (req, res) => {
 });
 
 module.exports.renderSuccessPage = (req, res) => {
-  const { id } = req.params;
+  const { id } = req.query;
   res.render("listings/bookSuccess", { id });
 };
+
+module.exports.searchListings =wrapAsync( async (req, res) => {
+
+  const { location } = req.query;
+  // console.log(location);
+
+  if (!location) {
+    res.redirect("/listings")
+  }
+    const allListings = await Listing.find({
+      location: { $regex: location, $options: 'i' }
+    });
+    res.render('listings/searchResults', { allListings, location });
+  
+});

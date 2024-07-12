@@ -24,6 +24,8 @@ router
 // CREATE FORM ROUTE
 router.get("/new", isLoggedIn, ListingController.newListingForm);
 
+router.get("/search", ListingController.searchListings);
+
 router
   .route("/:id")
   // EDIT FORM ROUTE

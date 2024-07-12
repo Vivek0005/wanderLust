@@ -18,6 +18,22 @@
         <a class="nav-link" href="/listings/new">Add new listing</a>
       </div>
 
+      <div class="search-box">
+        <form action="/listings/search" method="get" class="d-flex align-items-center">
+          <input 
+            type="text" 
+            name="location" 
+            class="form-control me-2" 
+            placeholder="Search by location" 
+            aria-label="Search by location" 
+          />
+          <button type="submit" class="btn btn-outline-primary search-btn">
+            <i class="ri-search-line"></i>
+          </button>
+        </form>
+      </div>
+      
+
       <div class="navbar-nav ms-auto" style="margin-right: 100px">
         <% if (!CurrentUser) { %>
         <a class="nav-link" href="/signup">Sign Up</a>
