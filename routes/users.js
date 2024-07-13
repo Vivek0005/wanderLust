@@ -22,19 +22,22 @@ router
     UserController.login
   );
 
-// LOGOUT ROUTE
 router.get("/logout", UserController.logout);
 
-// PROFILE ROUTE
-router.get("/users/:id", isLoggedIn, isUser, UserController.getProfile);
+router.get("/:id", isLoggedIn, isUser, UserController.getProfile);
 
-router.get("/users/:id/edit", isLoggedIn, isUser, UserController.editProfileForm);
+router.get("/:id/edit", isLoggedIn, isUser, UserController.editProfileForm);
 
-router.put("/users/:id", isLoggedIn, isUser, UserController.updateProfile);
+router.put("/:id", isLoggedIn, isUser, UserController.updateProfile);
 
-router.get("/users/:id/listings", isLoggedIn, isUser, UserController.UserListings);
+router.get("/:id/listings", isLoggedIn, isUser, UserController.UserListings);
 
-router.get("/users/:id/bookings", isLoggedIn, isUser, UserController.UserBookings);
+router.get("/:id/bookings", isLoggedIn, isUser, UserController.UserBookings);
+
+router
+  .route("/:id/change-password")
+  .get(isLoggedIn, isUser, UserController.changePasswordForm)
+  .post(isLoggedIn, isUser, UserController.changePassword);
 
 
 module.exports = router;

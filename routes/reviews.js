@@ -6,7 +6,6 @@ const { isLoggedIn } = require("../middlewares/authMiddleware");
 const { isAuthor } = require("../middlewares/authMiddleware");
 const ReviewController = require("../controllers/reviewsC.js");
 
-// Create REVIEW ROUTE
 router.post(
   "/",
   isLoggedIn,
@@ -14,7 +13,6 @@ router.post(
   ReviewController.createReview
 );
 
-// DELETE REVIEW ROUTE
 router.delete(
   "/:reviewId",
   isLoggedIn,

@@ -1,25 +1,25 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="card shadow-lg offset-md-3 col-md-6 mt-5">
-  <div class="card-header bg-primary text-white">
-    <h1 class="text-center">User Profile</h1>
+<div class="card offset-md-3 col-md-6 mt-5">
+  <div class="card-header text-white mb-4" style="background-color: whitesmoke; color: #222222 !important">
+    <h1 class="text-center">My Profile</h1>
   </div>
   <div class="card-body">
-    <form>
-      <div class="form-group">
-        <label for="username">Username:</label>
+    <form class="ms-5 me-5" >
+
+        <label for="username" class="form-label">Username:</label>
         <input type="text" class="form-control" id="username" value="<%= user.username %>" disabled>
-      </div>
-      <div class="form-group">
-        <label for="email">Email:</label>
+
+        <label for="email" class="form-label mt-3">Email:</label>
         <input type="email" class="form-control" id="email" value="<%= user.email %>" disabled>
-      </div>
-      <div class="form-group">
-        <label for="contact">Contact:</label>
+
+        <label for="contact" class="form-label mt-3">Contact:</label>
         <input type="text" class="form-control" id="contact" value="<%= user.contact %>" disabled>
-      </div>
-      <div class="text-center mt-4">
-        <a href="/users/<%= user._id %>/edit" class="btn btn-primary edit-btn">Edit Profile</a>
+
+        <div class="text-center mt-4 mb-3">
+        <a href="/users/<%= user._id %>/edit" class="btn btn-success">Edit Profile</a>
+        <a href="/users/<%= user._id %>/delete" class="btn btn-danger ms-5">Delete Profile</a>
+        <a href="/users/<%= user._id %>/change-password" class="btn btn-dark ms-5"> Change Password</a>
       </div>
     </form>
   </div>

@@ -1,14 +1,13 @@
-const { model } = require("mongoose");
 const User = require("../models/user");
 const { sendWelcomeEmail } = require("../utils/nodeMailer");
 const wrapAsync = require("../utils/wrapAsync");
 
-// Wrap each controller function with wrapAsync
-
+// Signup Form
 module.exports.signUpForm = (req, res) => {
   res.render("users/signup");
 };
 
+// Sign Up
 module.exports.signUp = wrapAsync(async (req, res, next) => {
   const { username, email, password, contact } = req.body;
   const user = new User({ username, email, contact });
@@ -25,16 +24,19 @@ module.exports.signUp = wrapAsync(async (req, res, next) => {
   });
 });
 
+// Login Form
 module.exports.loginForm = (req, res) => {
   res.render("users/login");
 };
 
+// Login
 module.exports.login = (req, res) => {
   const redirectUrl = res.locals.redirectUrl || "/listings";
   req.flash("success", "Logged in Successfully");
   res.redirect(redirectUrl);
 };
 
+// Logout
 module.exports.logout = (req, res, next) => {
   req.logout((err) => {
     if (err) {
@@ -45,6 +47,7 @@ module.exports.logout = (req, res, next) => {
   });
 };
 
+// User Profile
 module.exports.getProfile = wrapAsync(async (req, res, next) => {
   const user = await User.findById(req.user._id);
   if (!user) {
@@ -54,6 +57,7 @@ module.exports.getProfile = wrapAsync(async (req, res, next) => {
   res.render("users/userProfile", { user });
 });
 
+// Edit Profile Form
 module.exports.editProfileForm = wrapAsync(async (req, res, next) => {
   const user = await User.findById(req.user._id);
   if (!user) {
@@ -63,6 +67,7 @@ module.exports.editProfileForm = wrapAsync(async (req, res, next) => {
   res.render("users/editProfile", { user });
 });
 
+// Update Profile
 module.exports.updateProfile = wrapAsync(async (req, res, next) => {
   const { id } = req.params;
   const user = await User.findByIdAndUpdate(id, req.body.user, {
@@ -76,29 +81,68 @@ module.exports.updateProfile = wrapAsync(async (req, res, next) => {
   res.redirect(`/users/${id}`);
 });
 
+// Change Password Form
+module.exports.changePasswordForm = (req, res) => {
+  res.render("users/changePassword", { user: req.user });
+};
+
+// Change Password
+module.exports.changePassword = wrapAsync(async (req, res, next) => {
+  const { oldPassword, newPassword } = req.body;
+  const { id } = req.params;
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    req.flash("error", "User not found.");
+    return res.redirect(`/users/${id}/change-password`);
+  }
+
+  const isCorrect = await user.authenticate(oldPassword);
+
+  if (!isCorrect.user) {
+    req.flash("error", "Incorrect old password.");
+    return res.redirect(`/users/${id}/change-password`);
+  }
+
+  if (oldPassword === newPassword) {
+    req.flash("error", "New password cannot be the same as old password.");
+    return res.redirect(`/users/${id}/change-password`);
+  }
+
+  // Update Password
+  await user.setPassword(newPassword);
+  await user.save();
+
+  req.flash("success", "Password changed successfully.");
+  res.redirect(`/users/${id}`);
+});
+
+
+// User Listings
 module.exports.UserListings = wrapAsync(async (req, res, next) => {
   const user = await User.findById(req.user._id).populate('listings');
-  
+
   if (!user) {
-      return res.status(404).send('User not found');
+    return res.status(404).send('User not found');
   }
-  
+
   res.render('users/myListings', { listings: user.listings });
 });
 
+// User Bookings
 module.exports.UserBookings = wrapAsync(async (req, res, next) => {
   const user = await User.findById(req.user._id).populate({
     path: "bookings",
     populate: {
       path: "listing",
-      model: "Listing", 
+      model: "Listing",
     },
   });
 
   if (!user) {
     return res.status(404).send("User not found");
   }
-
   // console.log(user.bookings);
   res.render("users/myBookings", { bookings: user.bookings });
 });
+

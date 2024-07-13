@@ -81,7 +81,7 @@ app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 
 // User routes
-app.use("/", userRouter);
+app.use("/users", userRouter);
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));

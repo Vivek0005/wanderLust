@@ -8,15 +8,19 @@ const geocodingClient = mbxGeocoding({ accessToken: mapboxToken });
 const ExpressError = require("../utils/ExpressError");
 const { sendBookingConfirmation } = require("../utils/nodeMailer");
 
+
+// All Listings
 module.exports.index = wrapAsync(async (req, res) => {
   let allListings = await Listing.find({});
   res.render("listings/index.ejs", { allListings });
 });
 
+// New Listing
 module.exports.newListingForm = (req, res) => {
   res.render("listings/new.ejs");
 };
 
+// Create Listing
 module.exports.createListing = wrapAsync(async (req, res, next) => {
   let coordinates = await geocodingClient
     .forwardGeocode({
@@ -37,12 +41,13 @@ module.exports.createListing = wrapAsync(async (req, res, next) => {
 
   // listing.image = { url, filename }; ------
   req.user.listings.push(listing);
-  
+
   await listing.save();
   req.flash("success", "Listing created successfully");
   res.redirect("/listings");
 });
 
+// Show Listing
 module.exports.showListing = wrapAsync(async (req, res, next) => {
   let { id } = req.params;
   let listing = await Listing.findById(id)
@@ -54,7 +59,7 @@ module.exports.showListing = wrapAsync(async (req, res, next) => {
     })
     .populate("owner");
 
-    const formattedDescription = listing.description.replace(/\n/g, '<br>');
+  const formattedDescription = listing.description.replace(/\n/g, '<br>');
 
   if (!listing) {
     req.flash("error", " The Listing was not found");
@@ -63,6 +68,7 @@ module.exports.showListing = wrapAsync(async (req, res, next) => {
   res.render("listings/show.ejs", { listing, mapToken: process.env.MAP_TOKEN, formattedDescription });
 });
 
+// Edit Listing
 module.exports.editListingForm = wrapAsync(async (req, res, next) => {
   let { id } = req.params;
   let listing = await Listing.findById(id);
@@ -73,6 +79,7 @@ module.exports.editListingForm = wrapAsync(async (req, res, next) => {
   res.render("listings/edit.ejs", { listing });
 });
 
+// Update Listing
 module.exports.updateListing = wrapAsync(async (req, res, next) => {
   let { id } = req.params;
   let listing = await Listing.findByIdAndUpdate(id, req.body.listing, {
@@ -87,6 +94,7 @@ module.exports.updateListing = wrapAsync(async (req, res, next) => {
   res.redirect(`/listings/${id}`);
 });
 
+// Delete Listing
 module.exports.destroyListing = wrapAsync(async (req, res, next) => {
   const { id } = req.params;
   const listing = await Listing.findByIdAndDelete(id);
@@ -101,6 +109,25 @@ module.exports.destroyListing = wrapAsync(async (req, res, next) => {
   res.redirect("/listings");
 });
 
+// Search
+module.exports.searchListings = wrapAsync(async (req, res) => {
+  const { location } = req.query;
+  // console.log(location);
+
+  if (!location) {
+    res.redirect("/listings")
+  }
+  const allListings = await Listing.find({
+    $or: [
+      { location: { $regex: location, $options: 'i' } },
+      { country: { $regex: location, $options: 'i' } }
+    ]
+  });
+  res.render('listings/searchResults', { allListings, location });
+});
+
+// Booking
+// booking form
 module.exports.renderBookingForm = wrapAsync(async (req, res) => {
   const listing = await Listing.findById(req.params.id);
   if (!listing) {
@@ -110,6 +137,7 @@ module.exports.renderBookingForm = wrapAsync(async (req, res) => {
   res.render("listings/book", { listing });
 });
 
+// create booking
 module.exports.createBooking = wrapAsync(async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id).populate("owner");
@@ -126,6 +154,7 @@ module.exports.createBooking = wrapAsync(async (req, res) => {
   req.user.bookings.push(booking);
   await req.user.save();
 
+  // Sending booking confirmation email
   try {
     await sendBookingConfirmation(
       req.user.email,
@@ -138,10 +167,7 @@ module.exports.createBooking = wrapAsync(async (req, res) => {
       listing.owner.contact,
       listing.price
     );
-    // req.flash(
-    //   "success",
-    //   "Booking successful. Please Check your email for confirmation"
-    // );
+
   } catch (error) {
     req.flash(
       "error",
@@ -152,25 +178,9 @@ module.exports.createBooking = wrapAsync(async (req, res) => {
   res.redirect(`/listings/${id}/booking-success`);
 });
 
+// booking success page
 module.exports.renderSuccessPage = (req, res) => {
   const { id } = req.query;
   res.render("listings/bookSuccess", { id });
 };
 
-module.exports.searchListings =wrapAsync( async (req, res) => {
-
-  const { location } = req.query;
-  // console.log(location);
-
-  if (!location) {
-    res.redirect("/listings")
-  }
-  const allListings = await Listing.find({
-    $or: [
-      { location: { $regex: location, $options: 'i' } },
-      { country: { $regex: location, $options: 'i' } }
-    ]
-  });
-    res.render('listings/searchResults', { allListings, location });
-  
-});
