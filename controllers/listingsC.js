@@ -54,11 +54,13 @@ module.exports.showListing = wrapAsync(async (req, res, next) => {
     })
     .populate("owner");
 
+    const formattedDescription = listing.description.replace(/\n/g, '<br>');
+
   if (!listing) {
     req.flash("error", " The Listing was not found");
     res.redirect("/listings");
   }
-  res.render("listings/show.ejs", { listing, mapToken: process.env.MAP_TOKEN });
+  res.render("listings/show.ejs", { listing, mapToken: process.env.MAP_TOKEN, formattedDescription });
 });
 
 module.exports.editListingForm = wrapAsync(async (req, res, next) => {
@@ -163,9 +165,12 @@ module.exports.searchListings =wrapAsync( async (req, res) => {
   if (!location) {
     res.redirect("/listings")
   }
-    const allListings = await Listing.find({
-      location: { $regex: location, $options: 'i' }
-    });
+  const allListings = await Listing.find({
+    $or: [
+      { location: { $regex: location, $options: 'i' } },
+      { country: { $regex: location, $options: 'i' } }
+    ]
+  });
     res.render('listings/searchResults', { allListings, location });
   
 });
