@@ -39,5 +39,10 @@ router
   .get(isLoggedIn, isUser, UserController.changePasswordForm)
   .post(isLoggedIn, isUser, UserController.changePassword);
 
+// router.get("/:id/delete", isLoggedIn, isUser, UserController.sendOtpForDeletion);
+
+// router.post("/:id/verify-otp", isLoggedIn, isUser, UserController.verifyOtp);
+
+// router.delete("/:id/confirm-delete", isLoggedIn, isUser, UserController.deleteProfile);
 
 module.exports = router;

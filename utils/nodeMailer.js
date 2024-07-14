@@ -95,4 +95,15 @@ const sendWelcomeEmail = async (to, username) => {
   }
 };
 
-module.exports = { sendBookingConfirmation, sendWelcomeEmail };
+const sendOtpEmail = async (email, otp) => {
+  const mailOptions = {
+    from: 'your-email@gmail.com',
+    to: email,
+    subject: 'Your OTP for Account Deletion',
+    html: `Your OTP for account deletion is: <strong>${otp}</strong>. It is valid for 10 minutes.`
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+module.exports = { sendBookingConfirmation, sendWelcomeEmail, sendOtpEmail };

@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const { sendWelcomeEmail } = require("../utils/nodeMailer");
+const { sendWelcomeEmail, sendOtpEmail } = require("../utils/nodeMailer");
 const wrapAsync = require("../utils/wrapAsync");
 
 // Signup Form
@@ -7,7 +7,7 @@ module.exports.signUpForm = (req, res) => {
   res.render("users/signup");
 };
 
-// Sign Up
+// Sign Up  
 module.exports.signUp = wrapAsync(async (req, res, next) => {
   const { username, email, password, contact } = req.body;
   const user = new User({ username, email, contact });
@@ -67,6 +67,11 @@ module.exports.editProfileForm = wrapAsync(async (req, res, next) => {
   res.render("users/editProfile", { user });
 });
 
+// Confirm Password for Deletion
+module.exports.confirmPassword = (req, res) => {
+  res.render("users/confirmPassword", { user: req.user });
+};
+
 // Update Profile
 module.exports.updateProfile = wrapAsync(async (req, res, next) => {
   const { id } = req.params;
@@ -88,7 +93,8 @@ module.exports.changePasswordForm = (req, res) => {
 
 // Change Password
 module.exports.changePassword = wrapAsync(async (req, res, next) => {
-  const { oldPassword, newPassword } = req.body;
+
+  const { oldPassword, newPassword, confirmPassword } = req.body;
   const { id } = req.params;
   const user = await User.findById(req.user._id);
 
@@ -100,12 +106,17 @@ module.exports.changePassword = wrapAsync(async (req, res, next) => {
   const isCorrect = await user.authenticate(oldPassword);
 
   if (!isCorrect.user) {
-    req.flash("error", "Incorrect old password.");
+    await req.flash("error", "Incorrect old password.");
+    return res.redirect(`/users/${id}/change-password`);
+  }
+
+  if (newPassword !== confirmPassword) {
+    await req.flash("error", "New passwords do not match.");
     return res.redirect(`/users/${id}/change-password`);
   }
 
   if (oldPassword === newPassword) {
-    req.flash("error", "New password cannot be the same as old password.");
+    await req.flash("error", "New password cannot be the same as old password.");
     return res.redirect(`/users/${id}/change-password`);
   }
 
