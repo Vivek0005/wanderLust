@@ -58,8 +58,8 @@
           </div>
           <div class="navbar-nav ms-auto" style="margin-right: 90px">
             <% if (!CurrentUser) { %>
-              <a class="nav-link" href="/signup">Sign Up</a>
-              <a class="nav-link" href="/login">Log In</a>
+              <a class="nav-link" href="/users/signup">Sign Up</a>
+              <a class="nav-link" href="/users/login">Log In</a>
               <% } %> <% if (CurrentUser) { %>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -70,7 +70,7 @@
                     <li><a class="dropdown-item" href="/users/<%= CurrentUser._id %>"><i class="ri-user-line dropdown-item-icon"></i>Profile</a></li>
                     <li><a class="dropdown-item" href="/users/<%= CurrentUser._id %>/listings"><i class="ri-home-4-line dropdown-item-icon"></i>Listings</a></li>
                     <li><a class="dropdown-item" href="/users/<%= CurrentUser._id %>/bookings" style="border-bottom: 0.5px solid rgba(0, 0, 0,0.2);"><i class="ri-history-line dropdown-item-icon"></i>Bookings</a></li>
-                    <li><a class="dropdown-item" href="/logout"><i class="ri-logout-box-r-line dropdown-item-icon"></i> Log Out</a></li>
+                    <li><a class="dropdown-item" href="/users/logout"><i class="ri-logout-box-r-line dropdown-item-icon"></i> Log Out</a></li>
                   </ul>
                 </li>
               <!-- <a class="nav-link" href="/logout">Log Out</a> -->
@@ -95,10 +95,12 @@
     <div class="page2 row">
       <div id="top-selling">
         <p>Trending stays</p>
+        <h4>Top destinations</h4>
+      </div>
+
         <a href="/listings" class="btn btn-outline-dark explore-btn"
           >Explore more</a
         >
-        <h4>Top destinations</h4>
 
         <div class="row offset-1 mt-5">
           <div
@@ -110,9 +112,9 @@
               <div class="card listing-card1 col h-100 listing-card1">
                 <img
                   src="<%= lis.image %>"
-                  class="card-img-top"
+                  class="card-img-top show-img h-100 img-fluid"
+                  style="height: 20rem  !important;"
                   alt="..."
-                  style="height: 22rem"
                 />
                 <div class="card-img-overlay"></div>
                 <div class="card-body">
@@ -126,7 +128,6 @@
             <% } %>
           </div>
         </div>
-      </div>
     </div>
 
     <!-- <div class="page3"></div> -->
