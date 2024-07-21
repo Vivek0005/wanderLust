@@ -1,0 +1,126 @@
+<% layout('layouts/boilerplate') %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .booking-summary {
+            background: #f8f9fa;
+            border-radius: .375rem;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .booking-header {
+            background: #007bff;
+            color: #fff;
+            padding: 15px;
+            border-radius: .375rem .375rem 0 0;
+        }
+        .btn-pay {
+            background: #007bff;
+            color: #fff;
+            border: none;
+        }
+        .btn-pay:hover {
+            background: #0056b3;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="booking-summary">
+                <h3 class="booking-header">Booking Confirmation</h3>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5>Booking Details</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item"><strong>Name:</strong> <%= booking.name %></li>
+                            <li class="list-group-item"><strong>Email:</strong> <%= booking.email %></li>
+                            <li class="list-group-item"><strong>Phone:</strong> <%= booking.phone %></li>
+                            <li class="list-group-item"><strong>Check-in Date:</strong> <%= booking.checkin %></li>
+                            <li class="list-group-item"><strong>Check-out Date:</strong> <%= booking.checkout %></li>
+                            <li class="list-group-item"><strong>Special Requests:</strong> <%= booking.requests %></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Payment Details</h5>
+                        <p><strong>Total Amount:</strong> ₹<%= listing.price %></p>
+                        <p><strong>Listing:</strong> <%= listing.title %></p>
+                        <p><strong>Location:</strong> <%= listing.location %></p>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button id="pay-now" class="btn btn-pay btn-lg">Pay Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+$(document).ready(function() {
+    $('#pay-now').click(function() {
+        // Create Razorpay order
+        $.ajax({
+            url: '/create-payment-order/<%= listing._id %>', // Endpoint to create Razorpay order
+            method: 'POST',
+            data: JSON.stringify({ booking: <%= JSON.stringify(booking) %> }),
+            contentType: 'application/json',
+            success: function(response) {
+                var options = {
+                    "key": response.keyId,
+                    "amount": response.amount,
+                    "currency": response.currency,
+                    "name": "Your Company Name",
+                    "description": "Booking Payment",
+                    "image": "https://example.com/your_logo.png",
+                    "order_id": response.orderId,
+                    "handler": function (paymentResponse) {
+                        // Send payment details to backend for verification
+                        $.post('/verify-payment', {
+                            orderId: paymentResponse.razorpay_order_id,
+                            paymentId: paymentResponse.razorpay_payment_id,
+                            signature: paymentResponse.razorpay_signature,
+                            booking: <%= JSON.stringify(booking) %>
+                        }).done(function(data) {
+                            alert('Payment Successful and Booking Confirmed');
+                            window.location.href = '/booking-success'; // Redirect after successful booking
+                        }).fail(function() {
+                            alert('Payment Verification Failed');
+                        });
+                    },
+                    "prefill": {
+                        "name": <%= JSON.stringify(booking.name) %>,
+                        "email": <%= JSON.stringify(booking.email) %>,
+                        "contact": <%= JSON.stringify(booking.phone) %>
+                    },
+                    "notes": {
+                        "address": "Your Address"
+                    },
+                    "theme": {
+                        "color": "#007bff"
+                    }
+                };
+
+                var rzp1 = new Razorpay(options);
+                rzp1.open();
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>
