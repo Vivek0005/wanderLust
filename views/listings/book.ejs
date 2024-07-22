@@ -54,6 +54,7 @@
           id="checkin"
           name="booking[checkin]"
           required
+          min="<%= new Date().toISOString().split('T')[0] %>"
         />
         <div class="invalid-feedback">Please select a check-in date.</div>
       </div>
@@ -65,6 +66,7 @@
           id="checkout"
           name="booking[checkout]"
           required
+          min="<%= new Date().toISOString().split('T')[0] %>"
         />
         <div class="invalid-feedback">Please select a check-out date.</div>
       </div>
