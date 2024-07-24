@@ -8,6 +8,7 @@ WanderLust is a full-stack web app designed for finding and hosting unique vacat
 - **User Management:** Register, log in, and manage profiles with Passport.js authentication.
 - **Booking System:** Search and book vacation rentals.
 - **Interactive Maps:** View listings using Mapbox.
+- **Search & Sort:** Search and sort listings by various criteria.
 - **Email Notifications:** Receive booking confirmations with Nodemailer.
 - **Responsive Design:** Accessible on various devices and screen sizes.
 
