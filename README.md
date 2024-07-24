@@ -41,3 +41,5 @@ WanderLust is a full-stack web app designed for finding and hosting unique vacat
 6. Start the server:
    node app.js
 
+##Contact
+For questions or feedback, email me at vivekviki271@gmail.com.
