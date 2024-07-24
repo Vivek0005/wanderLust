@@ -11,9 +11,51 @@ const { sendBookingConfirmation } = require("../utils/nodeMailer");
 
 // All Listings
 module.exports.index = wrapAsync(async (req, res) => {
-  let allListings = await Listing.find({});
-  res.render("listings/index.ejs", { allListings });
+  const { sortBy } = req.query;
+  let sortCriteria;
+
+  switch (sortBy) {
+    case 'price-asc':
+      sortCriteria = { price: 1 };
+      break;
+    case 'price-desc':
+      sortCriteria = { price: -1 };
+      break;
+    case 'rating-asc':
+      sortCriteria = { avgRating: 1 };
+      break;
+    case 'rating-desc':
+      sortCriteria = { avgRating: -1 };
+      break;
+    default:
+      sortCriteria = null; 
+  }
+
+  const pipeline = [
+    {
+      $lookup: {
+        from: 'reviews',
+        localField: 'reviews',
+        foreignField: '_id',
+        as: 'reviews'
+      }
+    },
+    {
+      $addFields: {
+        avgRating: { $avg: '$reviews.rating' }
+      }
+    }
+  ];
+
+  if (sortCriteria) {
+    pipeline.push({ $sort: sortCriteria });
+  }
+
+  const allListings = await Listing.aggregate(pipeline);
+
+  res.render('listings/index', { allListings });
 });
+
 
 // New Listing
 module.exports.newListingForm = (req, res) => {

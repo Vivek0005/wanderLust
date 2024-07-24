@@ -5,7 +5,7 @@ const atlasUrl = process.env.ATLAS_URL;
 
 async function db_connect() {
   // const url = mongoUrl;
-  // console.log(process.env.DATABASE_URL);
+  // console.log(url);
   await mongoose.connect(atlasUrl);
 }
 
