@@ -10,7 +10,7 @@ cloudinary.config({
 const cloudStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "collegeProject",
+    folder: "wanderLust",
     allowedFormats: ["png", "jpg", "jpeg"],
   },
 });
