@@ -5,9 +5,9 @@ const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 const mapboxToken = process.env.MAP_TOKEN;
 const Booking = require("../models/booking");
 const geocodingClient = mbxGeocoding({ accessToken: mapboxToken });
-const ExpressError = require("../utils/ExpressError");
 const { sendBookingConfirmation } = require("../utils/nodeMailer");
-
+const multer = require("multer");
+const { cloudinary, cloudStorage } = "../config/cloud.js"
 
 // All Listings
 module.exports.index = wrapAsync(async (req, res) => {
@@ -28,7 +28,7 @@ module.exports.index = wrapAsync(async (req, res) => {
       sortCriteria = { avgRating: -1 };
       break;
     default:
-      sortCriteria = null; 
+      sortCriteria = null;
   }
 
   const pipeline = [
@@ -64,6 +64,10 @@ module.exports.newListingForm = (req, res) => {
 
 // Create Listing
 module.exports.createListing = wrapAsync(async (req, res, next) => {
+  
+  let listing = new Listing(req.body.listing);
+
+  //Map co ordinates
   let coordinates = await geocodingClient
     .forwardGeocode({
       query: req.body.listing.location,
@@ -73,19 +77,20 @@ module.exports.createListing = wrapAsync(async (req, res, next) => {
 
   let geometry = coordinates.body.features[0].geometry;
 
-  // let url = req.file.path;-------
-  // let filename = req.file.filename;------
+  // Image url and filename
+  let url = req.file ? req.file.path : 'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500';
+  let filename = req.file? req.file.filename : 'default-img';
 
-  // console.log(url, "....", filename);-------
-  let listing = new Listing(req.body.listing);
+  // console.log(url, "....", filename);
   listing.owner = req.user._id;
   listing.geometry = geometry;
-
-  // listing.image = { url, filename }; ------
+  listing.image = { url, filename };
   req.user.listings.push(listing);
 
   await listing.save();
   req.flash("success", "Listing created successfully");
+
+  // console.log(req.body.listing);
   res.redirect("/listings");
 });
 

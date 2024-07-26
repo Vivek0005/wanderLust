@@ -14,8 +14,8 @@ router
   .get(ListingController.index)
   .post(
     isLoggedIn,
-    validateMiddleware(listingSchema),
-    // upload.single("listing[image]"),
+    upload.single("listing[image]"),
+    // validateMiddleware(listingSchema),
     ListingController.createListing
   );
 
