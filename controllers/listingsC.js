@@ -129,9 +129,19 @@ module.exports.editListingForm = wrapAsync(async (req, res, next) => {
 // Update Listing
 module.exports.updateListing = wrapAsync(async (req, res, next) => {
   let { id } = req.params;
+
   let listing = await Listing.findByIdAndUpdate(id, req.body.listing, {
     new: true,
   });
+
+  if (req.file) {
+    const url = req.file.path;
+    const filename = req.file.filename;
+    listing.image = { url, filename };
+
+    await listing.save();
+  }
+
   req.flash("success", "Listing updated successfully");
   // console.log(listing);
   if (!listing) {

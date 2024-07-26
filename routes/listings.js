@@ -29,7 +29,8 @@ router
   .put(
     isLoggedIn,
     isOwner,
-    validateMiddleware(listingSchema),
+    upload.single("listing[image]"),
+    // validateMiddleware(listingSchema),
     ListingController.updateListing
   )
   .delete(isLoggedIn, isOwner, ListingController.destroyListing);

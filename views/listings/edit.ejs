@@ -10,6 +10,7 @@
       method="POST"
       class="needs-validation"
       novalidate
+      enctype="multipart/form-data"
     >
       <div>
         <label for="title" class="form-label"> Title : </label>
@@ -40,14 +41,17 @@
       </div>
 
       <div>
-        <label for="image" class="form-label"> Image : </label>
+        Original Image : <br>
+        <img src="<%= listing.image.url %>" alt="" class="img-fluid" style="height: 8rem; width: 10rem">
+        <br><br>
+
+        <label for="image" class="form-label">Upload New Image : </label>
         <input
           value="<%= listing.image %>"
           class="form-control mb-3"
-          type="text"
+          type="file"
           name="listing[image]"
           id="image"
-          required
           placeholder="Enter image url/link"
         />
 
