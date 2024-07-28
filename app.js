@@ -12,6 +12,8 @@ const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const User = require("./models/user");
 const passport = require("passport");
+const googleStrategy = require("./utils/google-oAuth-setup");
+const githubStrategy = require("./utils/github-oAuth-setup");
 const LocalStrategy = require("passport-local");
 const listingRouter = require("./routes/listings");
 const reviewRouter = require("./routes/reviews");
@@ -40,7 +42,7 @@ store.on("error", (e) => {
 
 const sessionOptions = {
   store: store,
-  secret: "process.env.SECRET",
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {

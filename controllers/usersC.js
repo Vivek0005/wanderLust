@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const { sendWelcomeEmail, sendOtpEmail } = require("../utils/nodeMailer");
+const { sendWelcomeEmail } = require("../utils/nodeMailer");
 const wrapAsync = require("../utils/wrapAsync");
 
 // Signup Form
@@ -32,7 +32,21 @@ module.exports.loginForm = (req, res) => {
 // Login
 module.exports.login = (req, res) => {
   const redirectUrl = res.locals.redirectUrl || "/listings";
-  req.flash("success", "Logged in Successfully");
+  req.flash("success", "Logged in Successfully!");
+  res.redirect(redirectUrl);
+};
+
+// Google Login
+module.exports.googleLogin = (req, res) => {
+  const redirectUrl = res.locals.redirectUrl || "/listings";
+  req.flash("success", "Logged in successfully!");
+  res.redirect(redirectUrl);
+};
+
+// Github Login
+module.exports.githubLogin = (req, res) => {
+  const redirectUrl = res.locals.redirectUrl || "/listings";
+  req.flash("success", "Logged in successfully!");
   res.redirect(redirectUrl);
 };
 
