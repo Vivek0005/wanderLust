@@ -1,103 +1,49 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="row">
-  <div class="col-8 offset-2">
-    <br /><br />
-    <h3>Create New Listing</h3>
-    <br />
-    <form action="/listings" method="post" novalidate class="needs-validation" enctype="multipart/form-data">
+<div class="row mt-3">
+  <div class="col-12 col-md-8 offset-md-2">
+    <h3 class="mb-4">Create New Listing</h3>
+    
+    <form action="/listings" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
       <div>
-        <label for="title" class="form-label"> Title : </label>
-        <input
-          type="text"
-          name="listing[title]"
-          id="title"
-          placeholder="Enter title"
-          class="form-control mb-3"
-          required
-        />
-        <div class="valid-feedback">
-          Title looks good!
-        </div>
-
-        <div class="invalid-feedback">
-          Enter a title!
-        </div>
+        <label for="title" class="form-label">Title:</label>
+        <input type="text" name="listing[title]" id="title" placeholder="Enter title" class="form-control mb-3" required />
+        <div class="valid-feedback">Title looks good!</div>
+        <div class="invalid-feedback">Enter a title!</div>
       </div>
 
       <div>
-        <label for="description" class="form-label"> Description : </label>
-        <textarea
-          class="form-control mb-3"
-          name="listing[description]"
-          required
-          id="description"
-        ></textarea>
-
-        <div class="invalid-feedback">
-          Enter a short description!
-        </div>
+        <label for="description" class="form-label">Description:</label>
+        <textarea class="form-control mb-3" name="listing[description]" id="description" required></textarea>
+        <div class="invalid-feedback">Enter a short description!</div>
       </div>
 
       <div>
-        <label for="image" class="form-label">Upload  Image : </label>
-        <input
-          class="form-control mb-3"
-          type="file"
-          name="listing[image]"
-          id="image"
-          placeholder="Enter image url/link"
-        />
+        <label for="image" class="form-label">Upload Image:</label>
+        <input type="file" name="listing[image]" id="image" class="form-control mb-3" />
       </div>
 
       <div>
-        <label for="location" class="form-label"> Location : </label>
-        <input
-          type="text"
-          class="form-control mb-3"
-          name="listing[location]"
-          required
-          id="location"
-          placeholder="Enter Location"
-        />
-        <div class="invalid-feedback">
-          Location should be valid!
-        </div>
+        <label for="location" class="form-label">Location:</label>
+        <input type="text" name="listing[location]" id="location" placeholder="Enter location" class="form-control mb-3" required />
+        <div class="invalid-feedback">Location should be valid!</div>
       </div>
 
       <div class="row">
         <div class="col-md-8">
-          <label for="country" class="form-label"> Country : </label>
-          <input
-            type="text"
-            name="listing[country]"
-            class="form-control mb-3"
-            required
-            id="country"
-            placeholder="Enter Country"
-          />
-          <div class="invalid-feedback">
-            Country should be valid!
-          </div>
+          <label for="country" class="form-label">Country:</label>
+          <input type="text" name="listing[country]" id="country" placeholder="Enter country" class="form-control mb-3" required />
+          <div class="invalid-feedback">Country should be valid!</div>
         </div>
 
         <div class="col-md-4">
-          <label for="price" class="form-label"> Price : </label>
-          <input
-            class="form-control mb-3"
-            name="listing[price]"
-            required
-            id="price"
-            placeholder="Enter Price"
-          />
-          <div class="invalid-feedback">
-            Price should be valid!
-          </div>
+          <label for="price" class="form-label">Price:</label>
+          <input type="number" name="listing[price]" id="price" placeholder="Enter price" class="form-control mb-3" required />
+          <div class="invalid-feedback">Price should be valid!</div>
         </div>
       </div>
-      <br />
-      <button class="btn add-btn">Add</button>
-      <br /><br />
+
+      <button class="btn btn-success mt-3 edit-btn mb-4">Add</button>
     </form>
   </div>
 </div>

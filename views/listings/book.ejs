@@ -1,85 +1,46 @@
 <% layout('layouts/boilerplate') %>
 
 <div class="row mt-3">
-  <div class="col-8 offset-2">
-    <h2>Book Your Stay at <%= listing.title %></h2>
-    <br>
-    <form
-      action="/listings/<%= listing._id %>/book"
-      method="post"
-      class="needs-validation mb-3"
-      novalidate
-    >
+  <div class="col-12 col-md-8 offset-md-2">
+    <h2 class="mb-4">Book Your Stay at <%= listing.title %></h2>
+    
+    <form action="/listings/<%= listing._id %>/book" method="post" class="needs-validation" novalidate>
       <div class="mb-3">
-        <label for="name" class="form-label">Name : </label>
-        <input
-          type="text"
-          class="form-control"
-          id="name"
-          name="booking[name]"
-          value="<%= CurrentUser.username %>"
-          required
-        />
+        <label for="name" class="form-label">Name:</label>
+        <input type="text" class="form-control" id="name" name="booking[name]" value="<%= CurrentUser.username %>" required />
         <div class="invalid-feedback">Please enter your name.</div>
       </div>
+
       <div class="mb-3">
-        <label for="email" class="form-label">Email : </label>
-        <input
-          type="email"
-          class="form-control"
-          id="email"
-          name="booking[email]"
-          value="<%= CurrentUser.email %>"
-          required
-        />
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" class="form-control" id="email" name="booking[email]" value="<%= CurrentUser.email %>" required />
         <div class="invalid-feedback">Please enter a valid email address.</div>
       </div>
+
       <div class="mb-3">
-        <label for="phone" class="form-label">Phone Number : </label>
-        <input
-          type="text"
-          class="form-control"
-          id="phone"
-          name="booking[phone]"
-          value="<%= CurrentUser.contact %>"
-          required
-        />
+        <label for="phone" class="form-label">Phone Number:</label>
+        <input type="text" class="form-control" id="phone" name="booking[phone]" value="<%= CurrentUser.contact %>" required />
         <div class="invalid-feedback">Please enter your phone number.</div>
       </div>
+
       <div class="mb-3">
-        <label for="checkin" class="form-label">Check-in Date : </label>
-        <input
-          type="date"
-          class="form-control"
-          id="checkin"
-          name="booking[checkin]"
-          required
-          min="<%= new Date().toISOString().split('T')[0] %>"
-        />
+        <label for="checkin" class="form-label">Check-in Date:</label>
+        <input type="date" class="form-control" id="checkin" name="booking[checkin]" required min="<%= new Date().toISOString().split('T')[0] %>" />
         <div class="invalid-feedback">Please select a check-in date.</div>
       </div>
+
       <div class="mb-3">
-        <label for="checkout" class="form-label">Check-out Date : </label>
-        <input
-          type="date"
-          class="form-control"
-          id="checkout"
-          name="booking[checkout]"
-          required
-          min="<%= new Date().toISOString().split('T')[0] %>"
-        />
+        <label for="checkout" class="form-label">Check-out Date:</label>
+        <input type="date" class="form-control" id="checkout" name="booking[checkout]" required min="<%= new Date().toISOString().split('T')[0] %>" />
         <div class="invalid-feedback">Please select a check-out date.</div>
       </div>
+
       <div class="mb-3">
-        <label for="requests" class="form-label">Special Requests : </label>
-        <textarea
-          class="form-control"
-          id="requests"
-          name="booking[requests]"
-          rows="3"
-        ></textarea>
+        <label for="requests" class="form-label">Special Requests:</label>
+        <textarea class="form-control" id="requests" name="booking[requests]" rows="3"></textarea>
       </div>
-      <button type="submit" class="btn btn-dark mt-3">Book Now</button>
+
+      <button type="submit" class="btn btn-dark mt-3 mb-4">Book Now</button>
     </form>
   </div>
 </div>
