@@ -29,6 +29,7 @@ router.get("/auth/google", passport.authenticate("google", {
 }));
 
 router.get("/auth/google/callback",
+  setRedirectUrl,
   passport.authenticate("google", {
     failureRedirect: "/users/login",
     failureFlash: true
@@ -42,6 +43,7 @@ router.get('/auth/github',
   }));
 
 router.get('/auth/github/callback',
+  setRedirectUrl,
   passport.authenticate('github', { failureRedirect: '/login' }),
   UserController.githubLogin
 );

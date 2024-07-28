@@ -39,6 +39,7 @@ module.exports.login = (req, res) => {
 // Google Login
 module.exports.googleLogin = (req, res) => {
   const redirectUrl = res.locals.redirectUrl || "/listings";
+  console.log(res.locals.redirectUrl);
   req.flash("success", "Logged in successfully!");
   res.redirect(redirectUrl);
 };
@@ -46,6 +47,7 @@ module.exports.googleLogin = (req, res) => {
 // Github Login
 module.exports.githubLogin = (req, res) => {
   const redirectUrl = res.locals.redirectUrl || "/listings";
+  console.log(res.locals.redirectUrl);
   req.flash("success", "Logged in successfully!");
   res.redirect(redirectUrl);
 };
