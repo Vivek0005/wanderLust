@@ -1,7 +1,7 @@
 # WanderLust
 
 **Description**  
-WanderLust is a full-stack web app designed for finding and hosting unique vacation rentals. Users can browse listings, book stays, and view interactive maps with listing locations.
+WanderLust is a full-stack web app designed for finding and hosting unique vacation rentals. Users can browse, add listings, book stays, and view interactive maps with listing locations.
 
 ## Features
 
@@ -18,7 +18,11 @@ WanderLust is a full-stack web app designed for finding and hosting unique vacat
 - **Back-End:** Node.js, Express.js
 - **Database:** MongoDB, MySQL
 - **APIs:** RESTful APIs
-- **Tools & Libraries:** Mapbox, Nodemailer, Passport.js
+- **Tools & Libraries:**
+      - Mapbox: For map integration
+      - Nodemailer: For sending emails
+      - Passport.js: For user authentication
+      - Cloudinary: For image storage
 - **Deployment:** Render
 
 ## Installation
