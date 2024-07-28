@@ -11,8 +11,16 @@ const userSchema = new Schema({
   },
   email: {
     type: String,
-    required: true,
+    // required: true,
     unique: true, 
+  },
+  googleId: {
+    type: String,
+    unique: true,
+  },
+  githubId: {
+    type: String,
+    unique: true,
   },
   contact: {
     type: String,
