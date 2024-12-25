@@ -16,7 +16,7 @@ WanderLust is a full-stack web app designed for finding and hosting unique vacat
 
 - **Front-End:** HTML, CSS, Bootstrap, JavaScript
 - **Back-End:** Node.js, Express.js
-- **Database:** MongoDB, MySQL
+- **Database:** MongoDB Atlas
 - **APIs:** RESTful APIs
 - **Tools & Libraries:**
       - Mapbox: For map integration
