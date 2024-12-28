@@ -1,7 +1,7 @@
 # WanderLust
 
 **Description**  
-WanderLust is a full-stack web app designed for finding and hosting unique vacation rentals. Users can browse, add listings, book stays, and view interactive maps with listing locations.
+WanderLust is a full-stack web application designed for finding and hosting unique vacation rentals. Users can browse, add listings, book stays, and view interactive maps with listing locations.
 
 ## Features
 
